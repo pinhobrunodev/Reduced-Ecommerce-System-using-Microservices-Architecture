@@ -8,8 +8,10 @@ import com.pinhobrunodev.OrderService.external.request.PaymentRequest;
 import com.pinhobrunodev.OrderService.helper.Constants;
 import com.pinhobrunodev.OrderService.model.OrderResponse;
 import com.pinhobrunodev.OrderService.model.PlaceOrderRequest;
+import com.pinhobrunodev.OrderService.model.ProductDetails;
 import com.pinhobrunodev.OrderService.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private PaymentService paymentService;
+
 
     @Override
     public Long placeOrder(PlaceOrderRequest placeOrderRequest) {
@@ -54,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Long doPayment(Order order, PlaceOrderRequest placeOrderRequest) {
+    public void doPayment(Order order, PlaceOrderRequest placeOrderRequest) {
         log.info("Calling Payment Service to complete the payment");
         PaymentRequest paymentRequest =
                 PaymentRequest
@@ -75,7 +78,6 @@ public class OrderServiceImpl implements OrderService {
         }
         order.setOrderStatus(orderStatus);
         orderRepository.save(order);
-        return order.getId();
     }
 
     @Override
@@ -89,6 +91,23 @@ public class OrderServiceImpl implements OrderService {
                 .orderStatus(order.getOrderStatus())
                 .orderDate(order.getOrderDate())
                 .amount(order.getAmount())
+                .productDetails(fetchProductDetails(order.getProductId()))
                 .build();
+    }
+
+    @Override
+    public ProductDetails fetchProductDetails(long productId) {
+        try {
+            var productDetails = new ProductDetails();
+            log.info("Invoking PRODUCT-SERVICE to fetch the product for id {}", productId);
+            var productByIdResponse = productService.getProductById(productId);
+            BeanUtils.copyProperties(productByIdResponse, productDetails);
+            return productDetails;
+        } catch (Exception e) {
+            log.error("An Error occurred during fetch data on PRODUCT-SERVICE");
+            log.error(e.getMessage());
+            return new ProductDetails();
+        }
+
     }
 }
