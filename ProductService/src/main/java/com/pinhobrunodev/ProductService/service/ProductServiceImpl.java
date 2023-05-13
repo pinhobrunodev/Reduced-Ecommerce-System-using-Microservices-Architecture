@@ -3,6 +3,7 @@ package com.pinhobrunodev.ProductService.service;
 
 import com.pinhobrunodev.ProductService.entity.Product;
 import com.pinhobrunodev.ProductService.exceptions.ProductServiceCustomException;
+import com.pinhobrunodev.ProductService.helper.Constants;
 import com.pinhobrunodev.ProductService.model.ProductByIdResponse;
 import com.pinhobrunodev.ProductService.model.ProductRequest;
 import com.pinhobrunodev.ProductService.repository.ProductRepository;
@@ -37,13 +38,13 @@ public class ProductServiceImpl implements ProductService {
         log.info("Reduce Quantity {} for Id: {}", quantity, productId);
         Product product = productRepository.findById(productId).orElseThrow(() -> new ProductServiceCustomException(
                 "Product with given Id not found",
-                "PRODUCT_NOT_FOUND"
+                Constants.PRODUCT_NOT_FOUND
         ));
         if (product.getQuantity() < quantity) {
             log.error("Product {} does not have sufficient quantity",productId);
             throw new ProductServiceCustomException(
                     "Product does not have sufficient quantity",
-                    "INSUFFICIENT_QUANTITY"
+                    Constants.INSUFFICIENT_QUANTITY
             );
         }
         product.setQuantity(product.getQuantity() - quantity);
