@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class ProductServiceImpl implements ProductService {
-
-
     @Autowired
     private ProductRepository productRepository;
 
@@ -33,6 +31,7 @@ public class ProductServiceImpl implements ProductService {
         log.info("Get the product for productId: {}", id);
         return productRepository.findById(id).map(ProductByIdResponse::new).orElseThrow(() -> new ProductServiceCustomException("Product with given id not found", "PRODUCT_NOT_FOUND"));
     }
+
     @Override
     public void reduceQuantity(long productId, long quantity) {
         log.info("Reduce Quantity {} for Id: {}", quantity, productId);
@@ -41,12 +40,13 @@ public class ProductServiceImpl implements ProductService {
                 "PRODUCT_NOT_FOUND"
         ));
         if (product.getQuantity() < quantity) {
+            log.error("Product {} does not have sufficient quantity",productId);
             throw new ProductServiceCustomException(
                     "Product does not have sufficient quantity",
                     "INSUFFICIENT_QUANTITY"
             );
         }
-        product.setQuantity(product.getQuantity()-quantity);
+        product.setQuantity(product.getQuantity() - quantity);
         productRepository.save(product);
         log.info("Product Quantity updated Successfully");
     }
