@@ -1,5 +1,6 @@
 package com.pinhobrunodev.OrderService.controller;
 
+import com.pinhobrunodev.OrderService.model.OrderResponse;
 import com.pinhobrunodev.OrderService.model.PlaceOrderRequest;
 import com.pinhobrunodev.OrderService.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,5 +22,10 @@ public class OrderController {
         var orderId = orderService.placeOrder(placeOrderRequest);
         log.info("Order Id: {}", orderId);
         return ResponseEntity.status(HttpStatus.CREATED).body(orderId);
+    }
+
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderResponse> getOrderDetails(@PathVariable long orderId) {
+        return  ResponseEntity.ok(orderService.getOrderDetails(orderId));
     }
 }

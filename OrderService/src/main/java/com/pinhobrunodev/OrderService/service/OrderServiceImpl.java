@@ -1,10 +1,12 @@
 package com.pinhobrunodev.OrderService.service;
 
 import com.pinhobrunodev.OrderService.entity.Order;
+import com.pinhobrunodev.OrderService.exception.CustomException;
 import com.pinhobrunodev.OrderService.external.client.PaymentService;
 import com.pinhobrunodev.OrderService.external.client.ProductService;
 import com.pinhobrunodev.OrderService.external.request.PaymentRequest;
 import com.pinhobrunodev.OrderService.helper.Constants;
+import com.pinhobrunodev.OrderService.model.OrderResponse;
 import com.pinhobrunodev.OrderService.model.PlaceOrderRequest;
 import com.pinhobrunodev.OrderService.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -74,5 +76,19 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderStatus(orderStatus);
         orderRepository.save(order);
         return order.getId();
+    }
+
+    @Override
+    public OrderResponse getOrderDetails(long orderId) {
+        log.info("Get order details for Order Id: {}", orderId);
+        Order order = orderRepository.findById(orderId).orElseThrow(
+                () -> new CustomException("Order not found for the given Id:" + orderId, Constants.NOT_FOUND, 404)
+        );
+        return OrderResponse.builder()
+                .orderId(order.getId())
+                .orderStatus(order.getOrderStatus())
+                .orderDate(order.getOrderDate())
+                .amount(order.getAmount())
+                .build();
     }
 }
