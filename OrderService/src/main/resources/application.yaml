@@ -15,3 +15,17 @@ spring:
     name: ORDER-SERVICE
   config:
     import: configserver:http://localhost:9296
+
+feign:
+  httpclient:
+    disable-ssl-validation: true
+  client:
+    config:
+      default:
+        connectionTimeout: 5000
+        readTimeout: 3000
+        loggerLevel: full
+
+logging:
+  level:
+    com.pinhobrunodev.OrderService.external.client: DEBUG

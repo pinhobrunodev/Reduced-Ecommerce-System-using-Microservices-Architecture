@@ -5,7 +5,6 @@ import com.pinhobrunodev.OrderService.exception.CustomException;
 import com.pinhobrunodev.OrderService.external.client.PaymentService;
 import com.pinhobrunodev.OrderService.external.client.ProductService;
 import com.pinhobrunodev.OrderService.external.request.PaymentRequest;
-import com.pinhobrunodev.OrderService.external.response.PaymentByIdResponse;
 import com.pinhobrunodev.OrderService.helper.Constants;
 import com.pinhobrunodev.OrderService.model.OrderResponse;
 import com.pinhobrunodev.OrderService.model.PaymentDetails;
@@ -102,8 +101,8 @@ public class OrderServiceImpl implements OrderService {
     public ProductDetails fetchProductDetails(long productId) {
         try {
             var productDetails = new ProductDetails();
-            log.info("Invoking PRODUCT-SERVICE to fetch the product for id {}", productId);
-            var productByIdResponse = productService.getProductById(productId);
+            log.info("Invoking PRODUCT-SERVICE to fetch the product details for Product Id {}", productId);
+            var productByIdResponse = productService.getProductDetails(productId);
             BeanUtils.copyProperties(productByIdResponse, productDetails);
             return productDetails;
         } catch (Exception e) {
@@ -116,7 +115,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public PaymentDetails fetchPaymentDetails(long orderId) {
-        log.info("Invoking PAYMENT-SERVICE to fetch the product for Order Id {}", orderId);
+        log.info("Invoking PAYMENT-SERVICE to fetch the payment details for Order Id {}", orderId);
         try {
             var paymentDetails = new PaymentDetails();
             var paymentByIdResponse = paymentService.getPaymentDetails(orderId);
