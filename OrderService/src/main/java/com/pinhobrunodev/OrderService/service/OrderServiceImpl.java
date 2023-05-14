@@ -5,8 +5,10 @@ import com.pinhobrunodev.OrderService.exception.CustomException;
 import com.pinhobrunodev.OrderService.external.client.PaymentService;
 import com.pinhobrunodev.OrderService.external.client.ProductService;
 import com.pinhobrunodev.OrderService.external.request.PaymentRequest;
+import com.pinhobrunodev.OrderService.external.response.PaymentByIdResponse;
 import com.pinhobrunodev.OrderService.helper.Constants;
 import com.pinhobrunodev.OrderService.model.OrderResponse;
+import com.pinhobrunodev.OrderService.model.PaymentDetails;
 import com.pinhobrunodev.OrderService.model.PlaceOrderRequest;
 import com.pinhobrunodev.OrderService.model.ProductDetails;
 import com.pinhobrunodev.OrderService.repository.OrderRepository;
@@ -92,6 +94,7 @@ public class OrderServiceImpl implements OrderService {
                 .orderDate(order.getOrderDate())
                 .amount(order.getAmount())
                 .productDetails(fetchProductDetails(order.getProductId()))
+                .paymentDetails(fetchPaymentDetails(orderId))
                 .build();
     }
 
@@ -109,5 +112,20 @@ public class OrderServiceImpl implements OrderService {
             return new ProductDetails();
         }
 
+    }
+
+    @Override
+    public PaymentDetails fetchPaymentDetails(long orderId) {
+        log.info("Invoking PAYMENT-SERVICE to fetch the product for Order Id {}", orderId);
+        try {
+            var paymentDetails = new PaymentDetails();
+            var paymentByIdResponse = paymentService.getPaymentDetails(orderId);
+            BeanUtils.copyProperties(paymentByIdResponse, paymentDetails);
+            return paymentDetails;
+        } catch (Exception e) {
+            log.error("An Error occurred during fetch data on PAYMENT-SERVICE");
+            log.error(e.getMessage());
+            return new PaymentDetails();
+        }
     }
 }

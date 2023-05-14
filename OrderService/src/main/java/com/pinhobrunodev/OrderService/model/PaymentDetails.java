@@ -6,13 +6,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ProductDetails {
-    private String productName;
-    private long productId;
-    private long quantity;
-    private long price;
+public class PaymentDetails {
+    private long paymentId;
+    private String status;
+    private PaymentMode paymentMode;
+    private long amount;
+    private Instant paymentDate;
+    private long orderId;
 }
