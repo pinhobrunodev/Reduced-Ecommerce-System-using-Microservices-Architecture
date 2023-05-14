@@ -99,32 +99,20 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public ProductDetails fetchProductDetails(long productId) {
-        try {
-            var productDetails = new ProductDetails();
-            log.info("Invoking PRODUCT-SERVICE to fetch the product details for Product Id {}", productId);
-            var productByIdResponse = productService.getProductDetails(productId);
-            BeanUtils.copyProperties(productByIdResponse, productDetails);
-            return productDetails;
-        } catch (Exception e) {
-            log.error("An Error occurred during fetch data on PRODUCT-SERVICE");
-            log.error(e.getMessage());
-            return new ProductDetails();
-        }
+        var productDetails = new ProductDetails();
+        log.info("Invoking PRODUCT-SERVICE to fetch the product details for Product Id {}", productId);
+        var productByIdResponse = productService.getProductDetails(productId);
+        BeanUtils.copyProperties(productByIdResponse, productDetails);
+        return productDetails;
 
     }
 
     @Override
     public PaymentDetails fetchPaymentDetails(long orderId) {
         log.info("Invoking PAYMENT-SERVICE to fetch the payment details for Order Id {}", orderId);
-        try {
-            var paymentDetails = new PaymentDetails();
-            var paymentByIdResponse = paymentService.getPaymentDetails(orderId);
-            BeanUtils.copyProperties(paymentByIdResponse, paymentDetails);
-            return paymentDetails;
-        } catch (Exception e) {
-            log.error("An Error occurred during fetch data on PAYMENT-SERVICE");
-            log.error(e.getMessage());
-            return new PaymentDetails();
-        }
+        var paymentDetails = new PaymentDetails();
+        var paymentByIdResponse = paymentService.getPaymentDetails(orderId);
+        BeanUtils.copyProperties(paymentByIdResponse, paymentDetails);
+        return paymentDetails;
     }
 }

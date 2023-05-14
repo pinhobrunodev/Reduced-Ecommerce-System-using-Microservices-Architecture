@@ -6,8 +6,10 @@ import com.pinhobrunodev.OrderService.external.response.PaymentByIdResponse;
 import com.pinhobrunodev.OrderService.helper.Constants;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-@CircuitBreaker(name = "external",fallbackMethod = "fallback")
+
+
 @FeignClient(value = "PAYMENT-SERVICE/payment")
 public interface PaymentService {
     @PostMapping
@@ -16,7 +18,9 @@ public interface PaymentService {
     @GetMapping(value = "/order/{orderId}")
     PaymentByIdResponse getPaymentDetails(@PathVariable long orderId);
 
+    @CircuitBreaker(name = "external", fallbackMethod = "fallback")
     default void fallback(Exception e){
+        System.out.println("Calling fallback for PAYMENT-SERVICE");
         throw  new CustomException(
                 Constants.PAYMENT_SVC_NOT_AVAILABLE,
                 Constants.UNAVAILABLE,
