@@ -7,7 +7,8 @@ public class Constants {
     public static final String NOT_FOUND = "NOT_FOUND";
 
     public static final String UNAVAILABLE = "UNAVAILABLE";
-
     public static final String PAYMENT_SVC_NOT_AVAILABLE = "Payment Service is not available";
+
+    public static final String PRODUCT_SVC_NOT_AVAILABLE = "Product Service is not available";
 
 }

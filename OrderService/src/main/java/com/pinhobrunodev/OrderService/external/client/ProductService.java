@@ -21,7 +21,7 @@ public interface ProductService {
 
     default void fallback(Exception e) {
         throw new CustomException(
-                Constants.PAYMENT_SVC_NOT_AVAILABLE,
+                Constants.PRODUCT_SVC_NOT_AVAILABLE,
                 Constants.UNAVAILABLE,
                 500
         );
