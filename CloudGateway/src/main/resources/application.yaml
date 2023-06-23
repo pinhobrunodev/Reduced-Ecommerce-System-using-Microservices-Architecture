@@ -49,8 +49,7 @@ spring:
                 redis-rate-limiter.burstCapacity: 1 #How many req can be allowed on this particular 1 second defined
 okta:
   oauth2:
-      issuer: https://dev-18709465.okta.com/oauth2/default
-      audience: api://default
-      client-id: 0oaa3lcfwi55FQB4j5d7
-      client-secret: AUfV7B49WdXQAhUqv1EgsfxJmqf_7oiv0q4uAW_3
-      scopes: openid, profile, email, offline_access
+    audience: api://default
+    client-id: 0oaalcfwi55FQB4j5d7
+    client-secret: AUfV7B49WdXQAhUqv1EgsfxJmqf_7oiv0q4uAW_3
+    scopes: openid, profile, email, offline_access
