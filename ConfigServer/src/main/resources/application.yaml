@@ -11,6 +11,3 @@ spring:
           uri: https://github.com/pinhobrunodev/spring-app-config-server
           default-label: master
           clone-on-start: true
-okta:
-  oauth2:
-    issuer: https://dev-18709465.okta.com/oauth2/default
